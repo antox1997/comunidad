@@ -74,6 +74,9 @@ if (!isset($_SESSION['usuario'])) {
                     <a class="nav-link text-white" href="<?php echo $url_base; ?>secciones/ciudadano">Ciudadanos</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link text-white" href="<?php echo $url_base; ?>secciones/familia/index.php">Familias</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link text-white" href="<?php echo $url_base; ?>secciones/calle">Calles</a>
                 </li>
                 <li class="nav-item">
@@ -82,9 +85,7 @@ if (!isset($_SESSION['usuario'])) {
                 <li class="nav-item">
                     <a class="nav-link text-white" href="<?php echo $url_base; ?>secciones/usuarios">Usuarios</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="<?php echo $url_base; ?>secciones/familia/index.php">Familias</a>
-                </li>
+                
                 <li class="nav-item">
                     <a class="nav-link text-white" href="<?php echo $url_base; ?>cerrar.php">Cerrar Sesión</a>
                 </li>
@@ -92,7 +93,7 @@ if (!isset($_SESSION['usuario'])) {
         </div>
     </div>
 </nav>
-
+<div class="bg-gradient-to-br from-purple-200 to-blue-200 py-8">
 
 </body>
 </html>

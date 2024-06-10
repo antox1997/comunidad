@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-06-2024 a las 15:33:06
+-- Tiempo de generación: 10-06-2024 a las 20:56:20
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -87,8 +87,7 @@ CREATE TABLE `libreria_ciudadano` (
   `N_tlf` varchar(250) NOT NULL,
   `acotaciones` varchar(250) NOT NULL,
   `foto` varchar(250) NOT NULL,
-  `idcalle` int(250) NOT NULL,
-  `id_familia` int(11) NOT NULL
+  `idcalle` int(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -152,8 +151,7 @@ ALTER TABLE `libreria_calle`
 --
 ALTER TABLE `libreria_ciudadano`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `idcalle` (`idcalle`),
-  ADD KEY `id_familia` (`id_familia`);
+  ADD KEY `idcalle` (`idcalle`);
 
 --
 -- Indices de la tabla `libreria_usuarios`
@@ -184,7 +182,7 @@ ALTER TABLE `cargo`
 -- AUTO_INCREMENT de la tabla `familia`
 --
 ALTER TABLE `familia`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT de la tabla `libreria_calle`
@@ -196,7 +194,7 @@ ALTER TABLE `libreria_calle`
 -- AUTO_INCREMENT de la tabla `libreria_ciudadano`
 --
 ALTER TABLE `libreria_ciudadano`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT de la tabla `libreria_usuarios`
@@ -208,7 +206,7 @@ ALTER TABLE `libreria_usuarios`
 -- AUTO_INCREMENT de la tabla `miembros_familia`
 --
 ALTER TABLE `miembros_familia`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- Restricciones para tablas volcadas
@@ -218,8 +216,7 @@ ALTER TABLE `miembros_familia`
 -- Filtros para la tabla `libreria_ciudadano`
 --
 ALTER TABLE `libreria_ciudadano`
-  ADD CONSTRAINT `libreria_ciudadano_ibfk_1` FOREIGN KEY (`idcalle`) REFERENCES `libreria_calle` (`id`),
-  ADD CONSTRAINT `libreria_ciudadano_ibfk_2` FOREIGN KEY (`id_familia`) REFERENCES `familia` (`id`);
+  ADD CONSTRAINT `libreria_ciudadano_ibfk_1` FOREIGN KEY (`idcalle`) REFERENCES `libreria_calle` (`id`);
 
 --
 -- Filtros para la tabla `libreria_usuarios`
@@ -231,8 +228,8 @@ ALTER TABLE `libreria_usuarios`
 -- Filtros para la tabla `miembros_familia`
 --
 ALTER TABLE `miembros_familia`
-  ADD CONSTRAINT `miembros_familia_ibfk_1` FOREIGN KEY (`familia_id`) REFERENCES `familia` (`id`),
-  ADD CONSTRAINT `miembros_familia_ibfk_2` FOREIGN KEY (`ciudadano_id`) REFERENCES `libreria_ciudadano` (`id`);
+  ADD CONSTRAINT `miembros_familia_ibfk_1` FOREIGN KEY (`ciudadano_id`) REFERENCES `libreria_ciudadano` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `miembros_familia_ibfk_2` FOREIGN KEY (`familia_id`) REFERENCES `familia` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
