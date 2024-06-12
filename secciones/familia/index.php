@@ -27,7 +27,7 @@ $lista_familias = $sentencia->fetchAll(PDO::FETCH_ASSOC);
     <input type="text" class="border border-gray-300 rounded-md py-2 px-4 mb-4 w-full" id="searchFamilia" placeholder="Buscar por nombre de familia">
     <a class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block" href="crear.php">Añadir Familia</a>
     <div class="overflow-x-auto">
-        <table class="table-auto border-collapse border border-gray-400 w-full">
+        <table class="min-w-full bg-white shadow-md rounded my-6">
             <thead>
                 <tr>
                     <th class="px-4 py-2 bg-gray-200 border border-gray-400">ID</th>
