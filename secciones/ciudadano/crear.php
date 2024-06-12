@@ -1,31 +1,39 @@
-<?php 
-include("../../bd.php"); 
+<?php
+include("../../bd.php");
 
 if($_POST) {
     $nombre = isset($_POST["nombre"]) ? $_POST["nombre"] : "";
     $apellido = isset($_POST["apellido"]) ? $_POST["apellido"] : "";
     $cedu = isset($_POST["cedu"]) ? $_POST["cedu"] : "";
     $N_tlf = isset($_POST["N_tlf"]) ? $_POST["N_tlf"] : "";
-    
+
     $foto = isset($_FILES["foto"]['name']) ? $_FILES["foto"]['name'] : "";
     $acotaciones = isset($_FILES["acotaciones"]['name']) ? $_FILES["acotaciones"]['name'] : "";
 
     $idcalle = isset($_POST["idcalle"]) ? $_POST["idcalle"] : "";
 
     $fecha_ = new DateTime();
-    
+
     $nombreArchivo_foto = ($foto != '') ? $fecha_->getTimestamp() . "_" . $_FILES["foto"]['name'] : "";
     $tmp_foto = $_FILES["foto"]['tmp_name'];
     if($tmp_foto != '') {   
-        move_uploaded_file($tmp_foto, "./" . $nombreArchivo_foto);
-    } 
+        if(move_uploaded_file($tmp_foto, "../../libreria/" . $nombreArchivo_foto)) {
+            echo "Foto subida exitosamente: " . $nombreArchivo_foto . "<br/>";
+        } else {
+            echo "Error al subir la foto<br/>";
+        }
+    }
+
     $fecha_ = new DateTime();
 
-    
     $nombreArchivo_acotaciones = ($acotaciones != '') ? $fecha_->getTimestamp() . "_" . $_FILES["acotaciones"]['name'] : "";
     $tmp_acotaciones = $_FILES["acotaciones"]['tmp_name'];
     if ($tmp_acotaciones != '') {
-        move_uploaded_file($tmp_acotaciones, "./". $nombreArchivo_acotaciones);
+        if(move_uploaded_file($tmp_acotaciones, "../../libreria/" . $nombreArchivo_acotaciones)) {
+            echo "Acotaciones subidas exitosamente: " . $nombreArchivo_acotaciones . "<br/>";
+        } else {
+            echo "Error al subir las acotaciones<br/>";
+        }
     }
 
     $sentencia = $conexion->prepare("INSERT INTO 
@@ -40,7 +48,11 @@ if($_POST) {
     $sentencia->bindParam(":acotaciones", $nombreArchivo_acotaciones);
     $sentencia->bindParam(":idcalle", $idcalle);
 
-    $sentencia->execute();
+    if($sentencia->execute()) {
+        echo "Registro agregado exitosamente<br/>";
+    } else {
+        echo "Error al agregar el registro<br/>";
+    }
 
     $mensaje = "Registro agregado";
     header("Location: index.php?mensaje=".$mensaje);
