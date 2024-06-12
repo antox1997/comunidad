@@ -1,32 +1,35 @@
 <?php 
 include("../../bd.php");
 
-if(isset($_GET['txtID'])){  
-    $txtID = isset($_GET['txtID']) ? $_GET['txtID'] : "";
-
+function eliminarRegistro($conexion, $id) {
     $sentencia = $conexion->prepare("SELECT foto, acotaciones FROM libreria_ciudadano WHERE id = :id");
-    $sentencia->bindParam(":id", $txtID);
+    $sentencia->bindParam(":id", $id);
     $sentencia->execute();
     $registro_recuperado = $sentencia->fetch(PDO::FETCH_ASSOC);
 
     if(isset($registro_recuperado["foto"]) && $registro_recuperado["foto"] != "") {
-        if(file_exists("./".$registro_recuperado["foto"])) {
-            unlink("./".$registro_recuperado["foto"]);
+        if(file_exists("../../libreria/" .$registro_recuperado["foto"])) {
+            unlink("../../libreria/" .$registro_recuperado["foto"]);
         }   
     }
 
     if(isset($registro_recuperado["acotaciones"]) && $registro_recuperado["acotaciones"] != "") {
-        if(file_exists("./".$registro_recuperado["acotaciones"])) {
-            unlink("./".$registro_recuperado["acotaciones"]);
+        if(file_exists("../../libreria/" .$registro_recuperado["acotaciones"])) {
+            unlink("../../libreria/" .$registro_recuperado["acotaciones"]);
         }   
     }
 
     $sentencia = $conexion->prepare("DELETE FROM libreria_ciudadano WHERE id = :id");
-    $sentencia->bindParam(":id", $txtID);
+    $sentencia->bindParam(":id", $id);
     $sentencia->execute();
 
-    $mensaje="Registro eliminado";
+    $mensaje = "Registro eliminado";
     header("Location: index.php?mensaje=".$mensaje);
+}
+
+if(isset($_GET['txtID'])){  
+    $txtID = $_GET['txtID'];
+    eliminarRegistro($conexion, $txtID);
 }
 
 $sentencia = $conexion->prepare("SELECT libreria_ciudadano.id, libreria_ciudadano.nombre, libreria_ciudadano.apellido, libreria_ciudadano.cedu, libreria_calle.nombreCalle as calle, libreria_ciudadano.foto
@@ -42,9 +45,7 @@ $lista_libreria_ciudadano = $sentencia->fetchAll(PDO::FETCH_ASSOC);
     <div class="container mx-auto">
         <div class="card">
             <div class="card-header">
-                <a class="btn btn-primary" href="crear.php" role="button">
-                    Agregar Registro
-                </a>
+                <a class="btn btn-primary" href="crear.php" role="button">Agregar Registro</a>
             </div>
             <div class="card-body">
                 <div class="table-responsive-sm">
@@ -54,7 +55,7 @@ $lista_libreria_ciudadano = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                                 <th scope="col">ID</th>
                                 <th scope="col">Nombre</th>
                                 <th scope="col">Apellido</th>
-                                <th scope="col">Cedula</th>
+                                <th scope="col">Cédula</th>
                                 <th scope="col">Calle</th>
                                 <th scope="col">Foto</th>
                                 <th scope="col">Acciones</th>
@@ -70,7 +71,7 @@ $lista_libreria_ciudadano = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                                     <td><?php echo $registro['calle']; ?></td>
                                     <td>
                                         <?php if (!empty($registro['foto'])): ?>
-                                            <img width="100" height="100" src="<?php echo $registro['foto']; ?>" class="img-fluid rounded" alt="Foto" />
+                                            <img width="100" height="100" src="../../libreria/<?php echo $registro['foto']; ?>" class="img-fluid rounded" alt="Foto" />
                                         <?php endif; ?>
                                     </td>
                                     <td>
@@ -97,7 +98,6 @@ $lista_libreria_ciudadano = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 </div>
 <?php include("../../templates/fooder.php"); ?>
 
-
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     function showPermissionDenied() {
@@ -107,6 +107,23 @@ $lista_libreria_ciudadano = $sentencia->fetchAll(PDO::FETCH_ASSOC);
             text: 'No tienes permiso para realizar esta acción',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'Entendido'
+        });
+    }
+
+    function borrar(id) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "No podrás revertir esto",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, borrar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location = "index.php?txtID=" + id;
+            }
         });
     }
 </script>
