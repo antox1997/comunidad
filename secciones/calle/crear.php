@@ -1,6 +1,6 @@
 <?php 
 include("../../bd.php");
-
+// probando
 $mensaje = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
